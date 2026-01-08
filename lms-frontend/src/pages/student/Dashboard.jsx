@@ -13,7 +13,7 @@ const StudentDashboard = () => {
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user'));
         
-          const res = await axios.get('http://localhost:5000/api/courses/user/enrolled', {
+          const res = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses/user/enrolled', {
               headers: { 'x-auth-token': token }
           });
         setEnrolledCourses(res.data); 

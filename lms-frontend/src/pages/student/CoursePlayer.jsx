@@ -18,7 +18,7 @@ const CoursePlayer = () => {
         const user = JSON.parse(localStorage.getItem('user'));
         
         // 1. Fetch the User's Enrolled Courses
-        const enrolledRes = await axios.get('http://localhost:5000/api/courses/user/enrolled', {
+        const enrolledRes = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses/user/enrolled', {
             headers: { 'x-auth-token': token }
         });
 
@@ -27,7 +27,7 @@ const CoursePlayer = () => {
         setIsEnrolled(hasEnrolled);
 
         // 3. Fetch Course Details (Public Info)
-        const courseRes = await axios.get(`http://localhost:5000/api/courses/${courseId}`);
+        const courseRes = await axios.get(`https://edtech-platform-backend-e6i3.onrender.com/api/courses/${courseId}`);
         setCourse(courseRes.data);
 
         // If enrolled and lectures exist, play the first one

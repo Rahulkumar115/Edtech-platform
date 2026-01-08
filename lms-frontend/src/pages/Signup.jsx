@@ -13,7 +13,7 @@ const Signup = () => {
     setLoading(true);
     try {
       // Send Register Request
-      await axios.post('http://localhost:5000/api/auth/register', formData);
+      await axios.post('https://edtech-platform-backend-e6i3.onrender.com/api/auth/register', formData);
       alert('Registration Successful! Please Login.');
       navigate('/login');
     } catch (err) {

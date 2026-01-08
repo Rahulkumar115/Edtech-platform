@@ -14,7 +14,7 @@ const TeacherDashboard = () => {
 
     const fetchCourses = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/courses');
+            const res = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses');
             // Filter only courses where instructor._id matches current user
             const myCourses = res.data.filter(c => c.instructor._id === storedUser.id);
             setCourses(myCourses);

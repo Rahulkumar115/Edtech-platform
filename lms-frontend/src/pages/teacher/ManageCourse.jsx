@@ -17,7 +17,7 @@ const ManageCourse = () => {
 
   const fetchCourse = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/courses/${courseId}`);
+      const res = await axios.get(`https://edtech-platform-backend-e6i3.onrender.com/api/courses/${courseId}`);
       setCourse(res.data);
     } catch (err) {
       console.error("Failed to load course");
@@ -39,7 +39,7 @@ const ManageCourse = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:5000/api/courses/${courseId}/lectures`, 
+      await axios.post(`https://edtech-platform-backend-e6i3.onrender.com/api/courses/${courseId}/lectures`, 
         { title: videoForm.title, videoId, notes: videoForm.notes }, 
         { headers: { 'x-auth-token': token } }
       );
@@ -54,7 +54,7 @@ const ManageCourse = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:5000/api/courses/${courseId}/live`, 
+      await axios.post(`https://edtech-platform-backend-e6i3.onrender.com/api/courses/${courseId}/live`, 
         liveForm, 
         { headers: { 'x-auth-token': token } }
       );

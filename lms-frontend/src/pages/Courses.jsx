@@ -16,13 +16,13 @@ const Courses = () => {
     const fetchData = async () => {
       try {
         // 1. Fetch All Courses
-        const res = await axios.get('http://localhost:5000/api/courses');
+        const res = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses');
         setCourses(res.data);
 
         // 2. Fetch User's Enrolled Courses (if logged in)
         if (user && localStorage.getItem('token')) {
             const token = localStorage.getItem('token');
-            const enrolledRes = await axios.get('http://localhost:5000/api/courses/user/enrolled', {
+            const enrolledRes = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses/user/enrolled', {
                 headers: { 'x-auth-token': token }
             });
             // Store IDs for easy checking
@@ -46,7 +46,7 @@ const Courses = () => {
       
       // 1. Create Order on Backend
       const { data: { order, course } } = await axios.post(
-        "http://localhost:5000/api/courses/checkout",
+        "https://edtech-platform-backend-e6i3.onrender.com/api/courses/checkout",
         { courseId },
         { headers: { 'x-auth-token': token } }
       );
@@ -69,7 +69,7 @@ const Courses = () => {
 
             // 3. Verify on Backend
             await axios.post(
-                "http://localhost:5000/api/courses/paymentverification",
+                "https://edtech-platform-backend-e6i3.onrender.com/api/courses/paymentverification",
                 verificationData,
                 { headers: { 'x-auth-token': token } }
             );

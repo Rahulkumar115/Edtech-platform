@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       // 1. Send Login Request to Backend
-      const res = await axios.post('http://localhost:5000/api/auth/login', formData);
+      const res = await axios.post('https://edtech-platform-backend-e6i3.onrender.com/api/auth/login', formData);
       
       // 2. Extract Data
       const { token, user } = res.data;

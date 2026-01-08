@@ -22,7 +22,7 @@ const handleSubmit = async (e) => {
   
   try {
     // 2. Send data to backend
-    await axios.post('http://localhost:5000/api/contact', formData);
+    await axios.post('https://edtech-platform-backend-e6i3.onrender.com/api/contact', formData);
     
     // 3. Success Feedback
     alert("Thank you! Your message has been sent successfully.");

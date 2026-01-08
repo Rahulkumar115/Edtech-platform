@@ -15,7 +15,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/courses');
+        const res = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses');
         setTrendingCourses(res.data.slice(0, 3));
       } catch (err) {
         console.error("Error fetching homepage courses:", err); 

@@ -19,7 +19,7 @@ const AdminDashboard = () => {
 
   const fetchStatsAndCourses = async () => {
     try {
-      const courseRes = await axios.get('http://localhost:5000/api/courses');
+      const courseRes = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses');
       setCourses(courseRes.data);
       setStats({
         totalStudents: 120, 
@@ -31,7 +31,7 @@ const AdminDashboard = () => {
 
   const fetchMessages = async () => {
     try {
-        const res = await axios.get('http://localhost:5000/api/contact', {
+        const res = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/contact', {
             headers: { 'x-auth-token': token }
         });
         setMessages(res.data);
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
   const handleDeleteCourse = async (courseId) => {
     if (!window.confirm("Delete this course?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${courseId}`, {
+      await axios.delete(`https://edtech-platform-backend-e6i3.onrender.com/api/courses/${courseId}`, {
         headers: { 'x-auth-token': token }
       });
       setCourses(courses.filter(c => c._id !== courseId));
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
   const handleDeleteMessage = async (msgId) => {
     if(!window.confirm("Delete this message?")) return;
     try {
-        await axios.delete(`http://localhost:5000/api/contact/${msgId}`, {
+        await axios.delete(`https://edtech-platform-backend-e6i3.onrender.com/api/contact/${msgId}`, {
             headers: { 'x-auth-token': token }
         });
         setMessages(messages.filter(m => m._id !== msgId));

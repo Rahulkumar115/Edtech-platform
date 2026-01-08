@@ -13,7 +13,7 @@ const CreateCourse = () => {
     const token = localStorage.getItem('token');
     
     try {
-      await axios.post('http://localhost:5000/api/courses', formData, {
+      await axios.post('https://edtech-platform-backend-e6i3.onrender.com/api/courses', formData, {
         headers: { 'x-auth-token': token }
       });
       navigate('/teacher/dashboard');
