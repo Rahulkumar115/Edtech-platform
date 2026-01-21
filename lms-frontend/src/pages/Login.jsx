@@ -19,23 +19,18 @@ const Login = () => {
     setError('');
 
     try {
-      // 1. Send Login Request to Backend
       const res = await axios.post('https://edtech-platform-backend-e6i3.onrender.com/api/auth/login', formData);
       
-      // 2. Extract Data
       const { token, user } = res.data;
 
-      // 3. Save to LocalStorage
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
 
-      // 4. Redirect based on Role (The Gateway Logic)
       if (user.role === 'admin') navigate('/admin/dashboard');
       else if (user.role === 'teacher') navigate('/teacher/dashboard');
-      else navigate('/student/dashboard');
+      else navigate('/');
 
     } catch (err) {
-      // Handle Errors
       setError(err.response?.data?.msg || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
@@ -45,16 +40,13 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-[#020617] flex items-center justify-center p-4 relative overflow-hidden">
       
-      {/* Background Decor */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-600/30 rounded-full blur-[100px]"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600/30 rounded-full blur-[100px]"></div>
 
-      {/* Back Button */}
       <Link to="/" className="absolute top-8 left-8 text-gray-400 hover:text-white flex items-center gap-2 transition">
         <ArrowLeft size={20} /> Back to Home
       </Link>
 
-      {/* Login Card */}
       <div className="bg-[#1e1e2e]/60 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>

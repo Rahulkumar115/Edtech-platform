@@ -25,7 +25,6 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen bg-[#020617] flex items-center justify-center p-4">
-       {/* (Keep the same background/design as Login) */}
        <div className="bg-[#1e1e2e]/60 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl w-full max-w-md">
           <h2 className="text-3xl font-bold text-white mb-6 text-center">Create Account</h2>
           <form onSubmit={handleSubmit} className="space-y-4">

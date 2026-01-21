@@ -17,20 +17,16 @@ const CoursePlayer = () => {
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user'));
         
-        // 1. Fetch the User's Enrolled Courses
         const enrolledRes = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses/user/enrolled', {
             headers: { 'x-auth-token': token }
         });
 
-        // 2. Check if the current courseId exists in their list
         const hasEnrolled = enrolledRes.data.some(c => c._id === courseId);
         setIsEnrolled(hasEnrolled);
 
-        // 3. Fetch Course Details (Public Info)
         const courseRes = await axios.get(`https://edtech-platform-backend-e6i3.onrender.com/api/courses/${courseId}`);
         setCourse(courseRes.data);
 
-        // If enrolled and lectures exist, play the first one
         if (hasEnrolled && courseRes.data.lectures.length > 0) {
             setCurrentVideo(courseRes.data.lectures[0]);
         }
@@ -48,8 +44,7 @@ const CoursePlayer = () => {
   if (loading) return <div className="min-h-screen bg-[#020617] text-white p-10">Checking access...</div>;
   if (!course) return <div className="min-h-screen bg-[#020617] text-white p-10">Course not found</div>;
 
-  // --- ACCESS DENIED SCREEN ---
-  // If user is NOT enrolled, show this instead of the player
+
   if (!isEnrolled) {
       return (
           <div className="min-h-screen bg-[#020617] text-white flex flex-col items-center justify-center p-8 text-center">
@@ -62,7 +57,6 @@ const CoursePlayer = () => {
                       You must enroll in <strong>{course.title}</strong> to watch the lectures and access resources.
                   </p>
                   
-                  {/* Since we are using Razorpay later, for now this redirects to Courses page or just Enroll logic */}
                   <Link to="/courses">
                     <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-bold transition w-full">
                         Go to Enrollment Page
@@ -73,7 +67,7 @@ const CoursePlayer = () => {
       );
   }
 
-  // --- ACCESS GRANTED (VIDEO PLAYER) ---
+  
   return (
     <div className="min-h-screen bg-[#020617] text-white flex flex-col md:flex-row h-screen overflow-hidden">
       

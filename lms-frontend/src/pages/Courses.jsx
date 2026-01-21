@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, BookOpen, CheckCircle } from 'lucide-react';
+import { Search, BookOpen, CheckCircle, LogOut } from 'lucide-react';
+import myProfilePic1 from '../assets/elogo.jpeg';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -10,7 +11,15 @@ const Courses = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
+  // Get user from local storage
   const user = JSON.parse(localStorage.getItem('user'));
+
+  // --- LOGOUT FUNCTION (Added) ---
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +62,7 @@ const Courses = () => {
 
       // 2. Razorpay Options
       const options = {
-        key: "rzp_test_RqBpTs0iYonPRv",
+        key: "rzp_test_RqBpTs0iYonPRv", // Replace with your actual Key ID if different
         amount: order.amount,
         currency: "INR",
         name: "LMS Platform",
@@ -102,8 +111,47 @@ const Courses = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white pt-20 px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#020617] text-white font-sans selection:bg-purple-500 selection:text-white">
+      
+      {/* --- NAVBAR (Added) --- */}
+      <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
+              {/* Use the img tag directly with a smaller height */}
+              <img 
+                src={myProfilePic1} 
+                alt="Logo" 
+                className="h-12 w-auto object-contain" 
+              />
+        
+        <div className="hidden md:flex space-x-8 text-gray-300">
+          <Link to="/" className="hover:text-purple-400 transition">Home</Link>
+          <Link to="/courses" className="text-purple-500 font-semibold">Courses</Link>
+          <Link to="/about" className="hover:text-purple-400 transition">About</Link>
+          <Link to="/contact" className="hover:text-purple-400 transition">Contact</Link>
+        </div>
+
+        {/* Auth Buttons */}
+        {user ? (
+            <div className="flex items-center gap-4">
+              <Link to={`/${user.role}/dashboard`}>
+                  <button className="text-gray-300 hover:text-white font-medium">Dashboard</button>
+              </Link>
+              <button 
+                  onClick={handleLogout} 
+                  className="bg-red-500/10 text-red-500 border border-red-500/50 px-4 py-2 rounded-lg hover:bg-red-500/20 transition"
+              >
+                  Logout
+              </button>
+            </div>
+        ) : (
+            <Link to="/login">
+              <button className="border border-purple-500/30 px-6 py-2 rounded-lg hover:bg-purple-500/10 transition text-purple-400 font-medium">
+                  Login
+              </button>
+            </Link>
+        )}
+      </nav>
+
+      <div className="max-w-7xl mx-auto px-8 py-12">
         
         {/* Header & Search */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">

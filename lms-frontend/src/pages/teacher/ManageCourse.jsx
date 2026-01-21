@@ -90,13 +90,11 @@ const ManageCourse = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             
-            {/* --- LEFT: LECTURE MANAGEMENT --- */}
             <div>
                 <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
                     <Video className="text-blue-400" /> Course Lectures
                 </h2>
                 
-                {/* Add Video Form */}
                 <form onSubmit={handleAddVideo} className="bg-[#1e1e2e]/50 p-6 rounded-xl border border-gray-700 mb-6">
                     <input 
                         className="w-full bg-[#11111b] border border-gray-700 rounded-lg p-3 mb-3 text-white" 
@@ -141,13 +139,12 @@ const ManageCourse = () => {
                 </div>
             </div>
 
-            {/* --- RIGHT: LIVE CLASS SCHEDULE --- */}
+            {/* --- LIVE CLASS SCHEDULE --- */}
             <div>
                 <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
                     <Calendar className="text-orange-400" /> Live Classes
                 </h2>
                 
-                {/* Add Live Class Form */}
                 <form onSubmit={handleAddLiveClass} className="bg-[#1e1e2e]/50 p-6 rounded-xl border border-gray-700 mb-6">
                     <input 
                         className="w-full bg-[#11111b] border border-gray-700 rounded-lg p-3 mb-3 text-white" 

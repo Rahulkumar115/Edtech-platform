@@ -20,11 +20,15 @@ import CoursePlayer from './pages/student/CoursePlayer';
 // Admin Page
 import AdminDashboard from './pages/admin/Dashboard';
 
+// --- IMPORT THE PROTECTED ROUTE COMPONENT ---
+// Make sure this file exists in your components folder!
+import ProtectedRoute from './components/ProtectedRoute';
+
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
+        {/* --- Public Routes (Anyone can access) --- */}
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/about" element={<About />} />
@@ -32,17 +36,59 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         
-        {/* Teacher Routes */}
-        <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-        <Route path="/teacher/create-course" element={<CreateCourse />} />
-        <Route path="/teacher/course/:courseId" element={<ManageCourse />} />
+        {/* --- Teacher Routes (PROTECTED) --- */}
+        <Route 
+          path="/teacher/dashboard" 
+          element={
+            <ProtectedRoute>
+              <TeacherDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/teacher/create-course" 
+          element={
+            <ProtectedRoute>
+              <CreateCourse />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/teacher/course/:courseId" 
+          element={
+            <ProtectedRoute>
+              <ManageCourse />
+            </ProtectedRoute>
+          } 
+        />
 
-        {/* Student Routes */}
-        <Route path="/student/dashboard" element={<StudentDashboard />} />
-        <Route path="/student/course/:courseId" element={<CoursePlayer />} />
+        {/* --- Student Routes (PROTECTED) --- */}
+        <Route 
+          path="/student/dashboard" 
+          element={
+            <ProtectedRoute>
+              <StudentDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/student/course/:courseId" 
+          element={
+            <ProtectedRoute>
+              <CoursePlayer />
+            </ProtectedRoute>
+          } 
+        />
 
-        {/* Admin Route */}
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        {/* --- Admin Route (PROTECTED) --- */}
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </Router>
   );

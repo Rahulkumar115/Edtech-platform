@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Trash2, Users, BookOpen, DollarSign, MessageSquare, Mail, Calendar } from 'lucide-react';
+import { Trash2, Users, BookOpen, DollarSign, MessageSquare, Mail, Calendar, Home, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate(); 
   const [activeTab, setActiveTab] = useState('courses');
   
   const [stats, setStats] = useState({ totalStudents: 0, totalCourses: 0, totalEarnings: 0 });
@@ -11,7 +13,12 @@ const AdminDashboard = () => {
   
   const token = localStorage.getItem('token');
 
-  // Fetch Data
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
+
   useEffect(() => {
     fetchStatsAndCourses();
     fetchMessages();
@@ -63,16 +70,32 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-[#020617] text-white p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+        
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+            
+            <div className="flex gap-4">
+                <Link to="/">
+                    <button className="flex items-center gap-2 bg-[#1e1e2e] hover:bg-[#2d2d3f] px-4 py-2 rounded-lg transition border border-gray-700">
+                        <Home size={18} /> Home
+                    </button>
+                </Link>
 
-        {/* Stats Grid */}
+                <button 
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-4 py-2 rounded-lg transition border border-red-500/30"
+                >
+                    <LogOut size={18} /> Logout
+                </button>
+            </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <StatCard icon={<Users className="text-blue-500" />} title="Total Students" value={stats.totalStudents} />
           <StatCard icon={<BookOpen className="text-purple-500" />} title="Total Courses" value={stats.totalCourses} />
           <StatCard icon={<DollarSign className="text-green-500" />} title="Total Earnings" value={`₹${stats.totalEarnings}`} />
         </div>
 
-        {/* TABS Navigation */}
         <div className="flex gap-4 mb-8 border-b border-gray-800 pb-4">
             <button 
                 onClick={() => setActiveTab('courses')}
@@ -88,7 +111,6 @@ const AdminDashboard = () => {
             </button>
         </div>
         
-        {/* 1. COURSES TAB */}
         {activeTab === 'courses' && (
             <div className="bg-[#1e1e2e] rounded-xl p-6 border border-gray-800">
                 <h2 className="text-xl font-bold mb-6">Course Management</h2>
@@ -125,7 +147,6 @@ const AdminDashboard = () => {
             </div>
         )}
 
-        {/* 2. MESSAGES TAB (New!) */}
         {activeTab === 'messages' && (
             <div className="grid grid-cols-1 gap-4">
                 {messages.length === 0 ? (
@@ -168,7 +189,6 @@ const AdminDashboard = () => {
   );
 };
 
-// Helper Component
 const StatCard = ({ icon, title, value }) => (
   <div className="bg-[#1e1e2e] p-6 rounded-xl border border-gray-800 flex items-center gap-4">
     <div className="bg-white/5 p-3 rounded-lg">{icon}</div>

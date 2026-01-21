@@ -11,7 +11,6 @@ const Home = () => {
   // Get user from local storage
   const user = JSON.parse(localStorage.getItem('user'));
 
-  // --- 1. FETCH COURSES ON LOAD ---
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -35,7 +34,6 @@ const Home = () => {
       
       {/* --- NAVBAR --- */}
       <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
-        {/* Use the img tag directly with a smaller height */}
         <img 
           src={myProfilePic} 
           alt="Logo" 
@@ -98,7 +96,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Right Content (Glass Card) */}
         <div className="relative">
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur-2xl opacity-30"></div>
           <div className="relative bg-[#1e1e2e]/60 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-2xl">
@@ -122,7 +119,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* --- TRENDING COURSES (NOW DYNAMIC) --- */}
+      {/* --- TRENDING COURSES --- */}
       <section className="px-8 py-16 max-w-7xl mx-auto">
         <div className="flex justify-between items-end mb-10">
           <h2 className="text-3xl font-bold">Trending Courses</h2>
@@ -131,14 +128,12 @@ const Home = () => {
           </Link>
         </div>
 
-        {/* Dynamic Data Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {trendingCourses.length > 0 ? (
             trendingCourses.map((course) => (
               <Link to={`/student/course/${course._id}`} key={course._id}>
                 <div className="bg-[#0f1120] border border-gray-800 p-5 rounded-2xl hover:border-purple-500/50 transition duration-300 group hover:-translate-y-1 cursor-pointer h-full">
                   
-                  {/* Thumbnail Image */}
                   <div className="mb-4 bg-gray-800 h-40 rounded-xl overflow-hidden relative">
                     <img 
                       src={course.thumbnail || "https://via.placeholder.com/400x300"} 

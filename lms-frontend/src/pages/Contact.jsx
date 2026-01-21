@@ -21,10 +21,8 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   
   try {
-    // 2. Send data to backend
     await axios.post('https://edtech-platform-backend-e6i3.onrender.com/api/contact', formData);
     
-    // 3. Success Feedback
     alert("Thank you! Your message has been sent successfully.");
     setFormData({ name: '', email: '', message: '' }); 
     
@@ -39,7 +37,6 @@ const handleSubmit = async (e) => {
       
       {/* --- NAVBAR --- */}
       <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
-              {/* Use the img tag directly with a smaller height */}
               <img 
                 src={myProfilePic} 
                 alt="Logo" 
@@ -84,7 +81,7 @@ const handleSubmit = async (e) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           
-          {/* Left: Contact Info */}
+          {/* Contact Info */}
           <div className="space-y-8">
              <div className="bg-[#1e1e2e] p-8 rounded-2xl border border-gray-800">
                 <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
@@ -113,9 +110,7 @@ const handleSubmit = async (e) => {
                 </div>
              </div>
 
-             {/* Map Placeholder */}
              <div className="bg-[#1e1e2e] h-64 rounded-2xl border border-gray-800 overflow-hidden relative group">
-                {/* Replace src with a real Google Maps Embed link if you want */}
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.081033282276!2d75.875!3d22.75!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fcad1b410ddb%3A0x96e9438d9005b6c8!2sIndore%2C%20Madhya%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000" 
                     width="100%" 
@@ -128,7 +123,7 @@ const handleSubmit = async (e) => {
              </div>
           </div>
 
-          {/* Right: Contact Form */}
+          {/* Contact Form */}
           <div className="bg-[#0f1120] p-8 rounded-3xl border border-gray-800">
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>

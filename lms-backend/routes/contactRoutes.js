@@ -21,7 +21,6 @@ router.get('/', auth, async (req, res) => {
             return res.status(403).json({ msg: "Access denied" });
         }
 
-        // Get messages sorted by newest first
         const messages = await Contact.find().sort({ date: -1 });
         res.json(messages);
     } catch (err) {
