@@ -11,10 +11,8 @@ const Courses = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  // Get user from local storage
   const user = JSON.parse(localStorage.getItem('user'));
 
-  // --- LOGOUT FUNCTION (Added) ---
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -28,13 +26,11 @@ const Courses = () => {
         const res = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses');
         setCourses(res.data);
 
-        // 2. Fetch User's Enrolled Courses (if logged in)
         if (user && localStorage.getItem('token')) {
             const token = localStorage.getItem('token');
             const enrolledRes = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses/user/enrolled', {
                 headers: { 'x-auth-token': token }
             });
-            // Store IDs for easy checking
             setEnrolledCourses(enrolledRes.data.map(c => c._id));
         }
       } catch (err) {
@@ -53,7 +49,7 @@ const Courses = () => {
     try {
       const token = localStorage.getItem('token');
       
-      // 1. Create Order on Backend
+      
       const { data: { order, course } } = await axios.post(
         "https://edtech-platform-backend-e6i3.onrender.com/api/courses/checkout",
         { courseId },
@@ -62,7 +58,7 @@ const Courses = () => {
 
       // 2. Razorpay Options
       const options = {
-        key: "rzp_test_RqBpTs0iYonPRv", // Replace with your actual Key ID if different
+        key: "rzp_test_RqBpTs0iYonPRv", 
         amount: order.amount,
         currency: "INR",
         name: "LMS Platform",
@@ -94,7 +90,7 @@ const Courses = () => {
         theme: { color: "#7c3aed" }
       };
 
-      // 4. Open Popup
+      
       const razor = new window.Razorpay(options);
       razor.open();
 
@@ -104,7 +100,7 @@ const Courses = () => {
     }
   };
 
-  // Filter courses based on search
+  
   const filteredCourses = courses.filter(course => 
     course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     course.category?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -113,9 +109,8 @@ const Courses = () => {
   return (
     <div className="min-h-screen bg-[#020617] text-white font-sans selection:bg-purple-500 selection:text-white">
       
-      {/* --- NAVBAR (Added) --- */}
+      
       <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
-              {/* Use the img tag directly with a smaller height */}
               <img 
                 src={myProfilePic1} 
                 alt="Logo" 
@@ -129,7 +124,6 @@ const Courses = () => {
           <Link to="/contact" className="hover:text-purple-400 transition">Contact</Link>
         </div>
 
-        {/* Auth Buttons */}
         {user ? (
             <div className="flex items-center gap-4">
               <Link to={`/${user.role}/dashboard`}>
@@ -153,7 +147,6 @@ const Courses = () => {
 
       <div className="max-w-7xl mx-auto px-8 py-12">
         
-        {/* Header & Search */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
             <div>
                 <h1 className="text-4xl font-bold mb-2">Explore Courses</h1>
@@ -171,7 +164,6 @@ const Courses = () => {
             </div>
         </div>
 
-        {/* Loading State */}
         {loading ? (
             <div className="text-center py-20 text-gray-500">Loading courses...</div>
         ) : (
@@ -183,12 +175,10 @@ const Courses = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-20">
                         {filteredCourses.map(course => {
-                            // Check if user owns this course
                             const isEnrolled = enrolledCourses.includes(course._id);
 
                             return (
                                 <div key={course._id} className="bg-[#0f1120] border border-gray-800 rounded-2xl overflow-hidden hover:border-purple-500/50 transition group hover:-translate-y-1 flex flex-col h-full">
-                                    {/* Thumbnail */}
                                     <div className="h-48 overflow-hidden relative bg-gray-800">
                                         <img 
                                             src={course.thumbnail || "https://via.placeholder.com/400x300?text=No+Image"} 
@@ -217,7 +207,6 @@ const Courses = () => {
                                             </span>
                                         </div>
                                         
-                                        {/* --- BUTTON LOGIC --- */}
                                         <div className="mt-6">
                                             {isEnrolled ? (
                                                 <Link to={`/student/course/${course._id}`}>
