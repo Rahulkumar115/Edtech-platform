@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import YouTube from 'react-youtube';
-import { Play, Lock, Calendar, AlertCircle } from 'lucide-react';
+import { Play, Lock, Calendar, AlertCircle, ArrowLeft, Home, LayoutDashboard } from 'lucide-react';
+
+// 🚀 IMPORT THE VERIFIED CERTIFICATE TEMPLATE
+import Certificate from '../../components/Certificate';
 
 const CoursePlayer = () => {
   const { courseId } = useParams();
@@ -10,12 +13,14 @@ const CoursePlayer = () => {
   const [currentVideo, setCurrentVideo] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const checkEnrollmentAndLoad = async () => {
       try {
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user'));
+        setCurrentUser(user);
         
         const enrolledRes = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses/user/enrolled', {
             headers: { 'x-auth-token': token }
@@ -44,7 +49,6 @@ const CoursePlayer = () => {
   if (loading) return <div className="min-h-screen bg-[#020617] text-white p-10">Checking access...</div>;
   if (!course) return <div className="min-h-screen bg-[#020617] text-white p-10">Course not found</div>;
 
-
   if (!isEnrolled) {
       return (
           <div className="min-h-screen bg-[#020617] text-white flex flex-col items-center justify-center p-8 text-center">
@@ -67,91 +71,148 @@ const CoursePlayer = () => {
       );
   }
 
-  
   return (
-    <div className="min-h-screen bg-[#020617] text-white flex flex-col md:flex-row h-screen overflow-hidden">
+    <div className="min-h-screen bg-[#020617] text-white flex flex-col h-screen overflow-hidden">
       
-      {/* --- LEFT: VIDEO PLAYER AREA --- */}
-      <div className="flex-1 overflow-y-auto p-6">
-        {currentVideo ? (
-            <div>
-                <div className="aspect-video w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
-                    <YouTube 
-                        videoId={currentVideo.videoId} 
-                        opts={{ width: '100%', height: '100%', playerVars: { autoplay: 1 } }} 
-                        className="h-full w-full"
-                    />
-                </div>
-                <h1 className="text-2xl font-bold mt-6">{currentVideo.title}</h1>
-                <p className="text-gray-400 mt-2">{course.description}</p>
+      {/* 🚀 TOP NAVIGATION HEADER BAR */}
+      <header className="bg-[#1e1e2e] border-b border-gray-800 px-6 py-3.5 flex items-center justify-between shrink-0 z-10 shadow-md">
+        <div className="flex items-center gap-4">
+          {/* Back to Dashboard Button */}
+          <Link 
+            to="/student/dashboard" 
+            className="flex items-center gap-2 text-gray-400 hover:text-white bg-[#0f1120] hover:bg-white/5 px-3.5 py-2 rounded-xl border border-gray-800 transition text-sm font-medium"
+          >
+            <ArrowLeft size={16} className="text-purple-400" />
+            <span>Back to Dashboard</span>
+          </Link>
 
-                {/* --- NOTES SECTION --- */}
-                {currentVideo.notes && (
-                  <div className="mt-4 p-4 bg-[#1e1e2e] rounded-xl border border-gray-700">
-                      <h3 className="font-bold text-gray-300 mb-2">Lecture Notes / Resources:</h3>
-                      {currentVideo.notes.startsWith('http') ? (
-                          <a href={currentVideo.notes} target="_blank" rel="noreferrer" className="text-blue-400 hover:underline flex items-center gap-2">
-                              📄 Download / View Resource
-                          </a>
-                      ) : (
-                          <p className="text-gray-400 whitespace-pre-wrap">{currentVideo.notes}</p>
-                      )}
+          {/* Vertical Divider */}
+          <span className="h-4 w-[1px] bg-gray-800 hidden sm:inline-block"></span>
+
+          {/* Dynamic Course Title */}
+          <h1 className="text-sm font-semibold text-gray-200 hidden sm:inline-block truncate max-w-[300px] md:max-w-[500px]">
+            {course.title}
+          </h1>
+        </div>
+
+        {/* Right Side Quick Links */}
+        <div className="flex items-center gap-2">
+          <Link 
+            to="/" 
+            title="Home"
+            className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition"
+          >
+            <Home size={18} />
+          </Link>
+          <Link 
+            to="/student/dashboard" 
+            title="Dashboard"
+            className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition"
+          >
+            <LayoutDashboard size={18} />
+          </Link>
+        </div>
+      </header>
+
+      {/* --- MAIN BODY PLACEMENT (PLAYER + SIDEBAR) --- */}
+      <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
+        
+        {/* --- LEFT: VIDEO PLAYER AREA --- */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {currentVideo ? (
+              <div>
+                  <div className="aspect-video w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+                      <YouTube 
+                          videoId={currentVideo.videoId} 
+                          opts={{ width: '100%', height: '100%', playerVars: { autoplay: 1 } }} 
+                          className="h-full w-full"
+                      />
                   </div>
-                )}
-            </div>
-        ) : (
-            <div className="h-full flex items-center justify-center text-gray-500">Select a lecture to start</div>
-        )}
+                  <h1 className="text-2xl font-bold mt-6">{currentVideo.title}</h1>
+                  <p className="text-gray-400 mt-2">{course.description}</p>
 
-        {/* Live Classes Section */}
-        {course.liveClasses.length > 0 && (
-            <div className="mt-10 p-6 bg-[#0f1120] rounded-xl border border-gray-800">
-                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <Calendar className="text-orange-400" /> Upcoming Live Classes
-                </h2>
-                <div className="space-y-3">
-                    {course.liveClasses.map((cls, idx) => (
-                        <div key={idx} className="flex justify-between items-center bg-[#1e1e2e] p-4 rounded-lg">
-                            <div>
-                                <h4 className="font-bold text-orange-400">{cls.topic}</h4>
-                                <p className="text-sm text-gray-400">{new Date(cls.date).toLocaleDateString()} at {cls.time}</p>
-                            </div>
-                            <a href={cls.meetingLink} target="_blank" rel="noreferrer">
-                                <button className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg text-sm font-bold">
-                                    Join
-                                </button>
+                  {/* --- NOTES SECTION --- */}
+                  {currentVideo.notes && (
+                    <div className="mt-4 p-4 bg-[#1e1e2e] rounded-xl border border-gray-700">
+                        <h3 className="font-bold text-gray-300 mb-2">Lecture Notes / Resources:</h3>
+                        {currentVideo.notes.startsWith('http') ? (
+                            <a href={currentVideo.notes} target="_blank" rel="noreferrer" className="text-blue-400 hover:underline flex items-center gap-2">
+                                📄 Download / View Resource
                             </a>
-                        </div>
-                    ))}
-                </div>
+                        ) : (
+                            <p className="text-gray-400 whitespace-pre-wrap">{currentVideo.notes}</p>
+                        )}
+                    </div>
+                  )}
+              </div>
+          ) : (
+              <div className="h-full flex items-center justify-center text-gray-500">Select a lecture to start</div>
+          )}
+
+          {/* Live Classes Section */}
+          {course.liveClasses.length > 0 && (
+              <div className="mt-10 p-6 bg-[#0f1120] rounded-xl border border-gray-800">
+                  <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                      <Calendar className="text-orange-400" /> Upcoming Live Classes
+                  </h2>
+                  <div className="space-y-3">
+                      {course.liveClasses.map((cls, idx) => (
+                          <div key={idx} className="flex justify-between items-center bg-[#1e1e2e] p-4 rounded-lg">
+                              <div>
+                                  <h4 className="font-bold text-orange-400">{cls.topic}</h4>
+                                  <p className="text-sm text-gray-400">{new Date(cls.date).toLocaleDateString()} at {cls.time}</p>
+                              </div>
+                              <a href={cls.meetingLink} target="_blank" rel="noreferrer">
+                                  <button className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg text-sm font-bold">
+                                      Join
+                                  </button>
+                              </a>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+          )}
+
+          {/* 🚀 EMBEDDED DYNAMIC COMPLETION CERTIFICATE */}
+          <div className="mt-12 border-t border-gray-800/80 pt-10">
+            <div className="mb-4">
+              <span className="text-xs font-semibold px-2.5 py-1 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 rounded-full">
+                Reward Artifact
+              </span>
             </div>
-        )}
-      </div>
+            <Certificate 
+              studentName={currentUser?.name || "Rahul Kumar"} 
+              courseTitle={course.title}
+            />
+          </div>
 
-      {/* --- RIGHT: SIDEBAR PLAYLIST --- */}
-      <div className="w-full md:w-96 bg-[#0f1120] border-l border-gray-800 flex flex-col h-full">
-         <div className="p-6 border-b border-gray-800">
-             <h2 className="font-bold text-lg">Course Content</h2>
-             <p className="text-sm text-gray-400">{course.lectures.length} Lessons</p>
-         </div>
-         <div className="overflow-y-auto flex-1 p-4 space-y-2">
-             {course.lectures.map((lec, idx) => (
-                 <div 
-                    key={idx} 
-                    onClick={() => setCurrentVideo(lec)}
-                    className={`p-4 rounded-xl cursor-pointer transition flex items-center gap-3 ${
-                        currentVideo?.videoId === lec.videoId 
-                        ? 'bg-purple-600 text-white' 
-                        : 'bg-[#1e1e2e] hover:bg-white/5 text-gray-300'
-                    }`}
-                 >
-                     {currentVideo?.videoId === lec.videoId ? <Play size={18} fill="white" /> : <Lock size={16} className="text-gray-500" />}
-                     <div className="text-sm font-medium">{lec.title}</div>
-                 </div>
-             ))}
-         </div>
-      </div>
+        </div>
 
+        {/* --- RIGHT: SIDEBAR PLAYLIST --- */}
+        <div className="w-full md:w-96 bg-[#0f1120] border-l border-gray-800 flex flex-col h-full shrink-0">
+           <div className="p-6 border-b border-gray-800">
+               <h2 className="font-bold text-lg">Course Content</h2>
+               <p className="text-sm text-gray-400">{course.lectures.length} Lessons</p>
+           </div>
+           <div className="overflow-y-auto flex-1 p-4 space-y-2">
+               {course.lectures.map((lec, idx) => (
+                   <div 
+                      key={idx} 
+                      onClick={() => setCurrentVideo(lec)}
+                      className={`p-4 rounded-xl cursor-pointer transition flex items-center gap-3 ${
+                          currentVideo?.videoId === lec.videoId 
+                          ? 'bg-purple-600 text-white' 
+                          : 'bg-[#1e1e2e] hover:bg-white/5 text-gray-300'
+                      }`}
+                   >
+                       {currentVideo?.videoId === lec.videoId ? <Play size={18} fill="white" /> : <Lock size={16} className="text-gray-500" />}
+                       <div className="text-sm font-medium">{lec.title}</div>
+                   </div>
+               ))}
+           </div>
+        </div>
+
+      </div>
     </div>
   );
 };

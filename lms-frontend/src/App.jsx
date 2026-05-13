@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Footer from './components/Footer';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -23,6 +24,7 @@ import AdminDashboard from './pages/admin/Dashboard';
 // --- IMPORT THE PROTECTED ROUTE COMPONENT ---
 // Make sure this file exists in your components folder!
 import ProtectedRoute from './components/ProtectedRoute';
+import FloatingAITutor from './components/FloatingAITutor';
 
 function App() {
   return (
@@ -90,6 +92,8 @@ function App() {
           } 
         />
       </Routes>
+      <FloatingAITutor />
+      <Footer />
     </Router>
   );
 }

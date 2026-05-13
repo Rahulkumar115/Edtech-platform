@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, BookOpen, CheckCircle, LogOut } from 'lucide-react';
 import myProfilePic1 from '../assets/elogo.jpeg';
 
@@ -9,7 +9,10 @@ const Courses = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  
   const navigate = useNavigate();
+  // 🚀 1. Hook into application routing variables to inspect URL properties
+  const location = useLocation();
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -19,10 +22,19 @@ const Courses = () => {
     navigate('/login');
   };
 
+  // 🚀 2. Read query string from navigation variables on component mount
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const initialQuery = searchParams.get('query') || '';
+    if (initialQuery) {
+      setSearchTerm(initialQuery);
+    }
+  }, [location.search]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. Fetch All Courses
+        // Fetch All Courses
         const res = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/courses');
         setCourses(res.data);
 
@@ -49,14 +61,13 @@ const Courses = () => {
     try {
       const token = localStorage.getItem('token');
       
-      
       const { data: { order, course } } = await axios.post(
         "https://edtech-platform-backend-e6i3.onrender.com/api/courses/checkout",
         { courseId },
         { headers: { 'x-auth-token': token } }
       );
 
-      // 2. Razorpay Options
+      // Razorpay Options
       const options = {
         key: "rzp_test_RqBpTs0iYonPRv", 
         amount: order.amount,
@@ -72,7 +83,7 @@ const Courses = () => {
                 courseId: courseId
             };
 
-            // 3. Verify on Backend
+            // Verify on Backend
             await axios.post(
                 "https://edtech-platform-backend-e6i3.onrender.com/api/courses/paymentverification",
                 verificationData,
@@ -90,7 +101,6 @@ const Courses = () => {
         theme: { color: "#7c3aed" }
       };
 
-      
       const razor = new window.Razorpay(options);
       razor.open();
 
@@ -100,7 +110,7 @@ const Courses = () => {
     }
   };
 
-  
+  // 🚀 3. Filter runtime state arrays strictly based on input context
   const filteredCourses = courses.filter(course => 
     course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     course.category?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -108,7 +118,6 @@ const Courses = () => {
 
   return (
     <div className="min-h-screen bg-[#020617] text-white font-sans selection:bg-purple-500 selection:text-white">
-      
       
       <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
               <img 
@@ -157,6 +166,7 @@ const Courses = () => {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
                 <input 
                     type="text" 
+                    value={searchTerm} // 🚀 Ensure local component state is cleanly bound to layout attributes
                     placeholder="Search courses..." 
                     className="w-full bg-[#0f1120] border border-gray-800 rounded-xl py-3 pl-12 pr-4 text-white focus:border-purple-500 outline-none transition"
                     onChange={(e) => setSearchTerm(e.target.value)}

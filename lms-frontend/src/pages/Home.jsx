@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
-import { Play, ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import myProfilePic from '../assets/elogo.jpeg';
+
+// 🚀 Core Custom Modules
+import HomepageSkillCheck from '../components/HomepageSkillCheck';
+import HeroGraphic from '../components/HeroGraphic';
+import SuccessMetrics from '../components/SuccessMetrics';
 
 const Home = () => {
   const navigate = useNavigate();
   const [trendingCourses, setTrendingCourses] = useState([]); 
   
-  // Get user from local storage
+  // Retrieve authorized local storage context cleanly
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
@@ -30,10 +35,10 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white font-sans selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen bg-[#020617] text-white font-sans selection:bg-purple-500 selection:text-white flex flex-col">
       
-      {/* --- NAVBAR --- */}
-      <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
+      {/* --- TOP NAVBAR --- */}
+      <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto w-full shrink-0">
         <img 
           src={myProfilePic} 
           alt="Logo" 
@@ -50,117 +55,79 @@ const Home = () => {
         {user ? (
             <div className="flex items-center gap-4">
               <Link to={`/${user.role}/dashboard`}>
-                  <button className="text-gray-300 hover:text-white font-medium">Dashboard</button>
+                  <button className="text-gray-300 hover:text-white font-medium cursor-pointer">Dashboard</button>
               </Link>
               <button 
                   onClick={handleLogout} 
-                  className="bg-red-500/10 text-red-500 border border-red-500/50 px-4 py-2 rounded-lg hover:bg-red-500/20 transition"
+                  className="bg-red-500/10 text-red-500 border border-red-500/50 px-4 py-2 rounded-lg hover:bg-red-500/20 transition cursor-pointer"
               >
                   Logout
               </button>
             </div>
         ) : (
             <Link to="/login">
-              <button className="border border-purple-500/30 px-6 py-2 rounded-lg hover:bg-purple-500/10 transition text-purple-400 font-medium">
+              <button className="border border-purple-500/30 px-6 py-2 rounded-lg hover:bg-purple-500/10 transition text-purple-400 font-medium cursor-pointer">
                   Login
               </button>
             </Link>
         )}
       </nav>
 
-      {/* --- HERO SECTION --- */}
-      <section className="relative px-8 py-12 md:py-20 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div className="space-y-6 z-10">
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-            Learn. <br />
-            Upskill. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">
-              Succeed
-            </span>
-          </h1>
-          <p className="text-gray-400 max-w-md text-lg">
-            Master the skills of tomorrow. From coding to design, 
-            unlock your potential with our expert-led courses.
-          </p>
-          <div className="flex space-x-4 pt-4">
-            <Link to="/signup">
-                <button className="bg-[#7c3aed] hover:bg-[#6d28d9] px-8 py-3 rounded-xl font-medium transition shadow-lg shadow-purple-900/50">
-                Start Learning
-                </button>
-            </Link>
-            <Link to="/courses">
-                <button className="border border-gray-700 px-8 py-3 rounded-xl font-medium hover:bg-white/5 transition">
-                Explore Courses
-                </button>
-            </Link>
-          </div>
-        </div>
+      {/* 🚀 1. DYNAMIC PARTICLE NETWORK HERO SECTION */}
+      <HeroGraphic />
 
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur-2xl opacity-30"></div>
-          <div className="relative bg-[#1e1e2e]/60 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-2xl">
-            <div className="bg-[#11111b] rounded-xl h-48 flex items-center justify-center relative overflow-hidden group">
-               <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-blue-900/20"></div>
-               <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md p-4 rounded-full border border-white/10 transition group-hover:scale-110">
-                 <Play fill="white" className="ml-1" size={32} />
-               </button>
-            </div>
-            <div className="mt-6 flex justify-between items-center">
-              <div>
-                <h3 className="font-semibold text-lg">Course Preview</h3>
-                <p className="text-sm text-gray-400">Introduction to React</p>
-              </div>
-              <span className="text-purple-400 font-bold">50%</span>
-            </div>
-            <div className="mt-3 h-2 bg-gray-700 rounded-full overflow-hidden">
-              <div className="h-full w-1/2 bg-gradient-to-r from-purple-500 to-blue-500"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 📊 2. REAL-TIME SUCCESS METRICS COUNTDOWN DASHBOARD */}
+      <SuccessMetrics />
 
-      {/* --- TRENDING COURSES --- */}
-      <section className="px-8 py-16 max-w-7xl mx-auto">
+      {/* --- 3. TRENDING COURSE PREVIEWS --- */}
+      <section className="px-8 py-16 max-w-7xl mx-auto w-full flex-1">
         <div className="flex justify-between items-end mb-10">
-          <h2 className="text-3xl font-bold">Trending Courses</h2>
+          <h2 className="text-3xl font-bold">Trending Masterclasses</h2>
           <Link to="/courses" className="text-purple-400 hover:text-purple-300 text-sm flex items-center gap-1">
-            View All <ArrowRight size={16}/>
+            View Catalog <ArrowRight size={16}/>
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {trendingCourses.length > 0 ? (
             trendingCourses.map((course) => (
               <Link to={`/student/course/${course._id}`} key={course._id}>
-                <div className="bg-[#0f1120] border border-gray-800 p-5 rounded-2xl hover:border-purple-500/50 transition duration-300 group hover:-translate-y-1 cursor-pointer h-full">
+                <div className="bg-[#0f1120] border border-gray-800 p-5 rounded-2xl hover:border-purple-500/50 transition duration-300 group hover:-translate-y-1 cursor-pointer h-full flex flex-col justify-between shadow-xl">
                   
-                  <div className="mb-4 bg-gray-800 h-40 rounded-xl overflow-hidden relative">
-                    <img 
-                      src={course.thumbnail || "https://via.placeholder.com/400x300"} 
-                      alt={course.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition"
-                    />
+                  <div>
+                    <div className="mb-4 bg-gray-800 h-40 rounded-xl overflow-hidden relative">
+                      <img 
+                        src={course.thumbnail || "https://via.placeholder.com/400x300"} 
+                        alt={course.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition"
+                      />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2 truncate">{course.title}</h3>
+                    <p className="text-gray-400 text-sm line-clamp-2 mb-4">{course.description}</p>
+                  </div>
+                  
+                  <div className="flex justify-between items-center border-t border-gray-800/80 pt-3 mt-auto">
+                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <BookOpen size={14} /> {course.lectures?.length || 0} Lessons
+                    </span>
+                    <span className="text-emerald-400 font-bold text-sm">
+                       {course.price === 0 ? 'Free Track' : `₹${course.price}`}
+                    </span>
                   </div>
 
-                  <h3 className="text-xl font-bold mb-2 truncate">{course.title}</h3>
-                  <p className="text-gray-400 text-sm line-clamp-2 mb-4">{course.description}</p>
-                  
-                  <div className="flex justify-between items-center mt-auto">
-                    <span className="text-sm text-gray-500 flex items-center gap-1">
-                      <BookOpen size={16} /> {course.lectures.length} Lessons
-                    </span>
-                    <span className="text-green-400 font-bold">
-                       {course.price === 0 ? 'Free' : `₹${course.price}`}
-                    </span>
-                  </div>
                 </div>
               </Link>
             ))
           ) : (
             <div className="col-span-3 text-center py-10 text-gray-500 bg-[#0f1120] rounded-xl border border-dashed border-gray-800">
-              No courses available yet. Visit the Teacher Dashboard to create one!
+              No core modules available yet. Check back after your database sync completes!
             </div>
           )}
+        </div>
+
+        {/* 🧠 4. DYNAMIC SKILL CHECK TRIGGER CONTAINER */}
+        <div id="skill-check" className="scroll-mt-6">
+          <HomepageSkillCheck />
         </div>
       </section>
 
