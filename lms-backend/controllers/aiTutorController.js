@@ -123,3 +123,49 @@ exports.generateLiveQuiz = async (req, res) => {
     res.status(500).json({ error: "Failed to generate live quiz. Please try again." });
   }
 };
+
+// Append to the bottom of aiTutorController.js
+
+exports.checkAtsScore = async (req, res) => {
+  const { resumeText, targetRole = "Software Engineer" } = req.body;
+
+  if (!resumeText || resumeText.trim().length < 50) {
+    return res.status(400).json({ error: "Please paste a complete resume summary or bullet points for accurate scoring." });
+  }
+
+  try {
+    if (!process.env.GEMINI_API_KEY) {
+      return res.status(500).json({ error: "API configuration missing." });
+    }
+
+    const { GoogleGenerativeAI } = require("@google/generative-ai");
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+    // Force strict JSON output matching our frontend grading metrics
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-2.5-flash",
+      generationConfig: { responseMimeType: "application/json" },
+      systemInstruction: `You are an elite Tech Recruiter and strict ATS (Applicant Tracking System) software scanner.
+      Analyze the submitted resume text against the target job role.
+      Evaluate based on: Keyword optimization, Action verbs, Quantifiable impact/metrics, and Core technical skill alignment.
+      Output strictly in this JSON format:
+      {
+        "score": integer between 0 and 100,
+        "verdict": "Short one sentence summary of overall readiness",
+        "strengths": ["Strength 1", "Strength 2"],
+        "improvements": ["Actionable fix 1", "Actionable fix 2"]
+      }`
+    });
+
+    const prompt = `Target Role: ${targetRole}\n\nResume Content to Scan:\n${resumeText}`;
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
+
+    const atsReport = JSON.parse(responseText);
+    res.status(200).json(atsReport);
+
+  } catch (error) {
+    console.error("🎯 ATS Scan Failure:", error);
+    res.status(500).json({ error: "ATS scanning engine overloaded. Please try submitting again." });
+  }
+};

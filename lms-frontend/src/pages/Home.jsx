@@ -8,6 +8,7 @@ import myProfilePic from '../assets/elogo.jpeg';
 import HomepageSkillCheck from '../components/HomepageSkillCheck';
 import HeroGraphic from '../components/HeroGraphic';
 import SuccessMetrics from '../components/SuccessMetrics';
+import AtsResumeChecker from '../components/AtsResumeChecker';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white font-sans selection:bg-purple-500 selection:text-white flex flex-col">
+    <div className="min-h-screen bg-[#0f1120] text-white font-sans selection:bg-purple-500 selection:text-white flex flex-col">
       
       {/* --- TOP NAVBAR --- */}
       <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto w-full shrink-0">
@@ -123,6 +124,9 @@ const Home = () => {
               No core modules available yet. Check back after your database sync completes!
             </div>
           )}
+        </div>
+        <div id="ats-scanner" className="scroll-mt-6 mb-12">
+          <AtsResumeChecker />
         </div>
 
         {/* 🧠 4. DYNAMIC SKILL CHECK TRIGGER CONTAINER */}
