@@ -21,7 +21,7 @@ const HomepageSkillCheck = () => {
 
     try {
       // Pointing to your local backend for testing
-      const res = await axios.get('http://localhost:5000/api/tutor/live-quiz');
+      const res = await axios.get('https://edtech-platform-backend-e6i3.onrender.com/api/tutor/live-quiz');
       setQuizQuestions(res.data);
     } catch (err) {
       console.error("Error fetching AI quiz:", err);

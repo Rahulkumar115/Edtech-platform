@@ -64,7 +64,7 @@ const FloatingAITutor = () => {
       const currentPageContext = getPageContext(location.pathname);
 
       // 4. Make the API call to your local backend
-      const res = await axios.post('http://localhost:5000/api/tutor/ask', {
+      const res = await axios.post('https://edtech-platform-backend-e6i3.onrender.com/api/tutor/ask', {
         chatHistory,
         newQuestion: userMsg.text,
         courseTitle: currentPageContext,
