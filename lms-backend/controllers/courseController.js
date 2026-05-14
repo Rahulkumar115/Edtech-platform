@@ -231,7 +231,7 @@ exports.paymentVerification = async (req, res) => {
         await user.save();
       }
 
-      res.redirect(`http://localhost:5173/student/dashboard`); // Redirect to frontend
+      res.redirect(`https://edtech-platform-backend-e6i3.onrender.com/student/dashboard`); // Redirect to frontend
     } else {
       res.status(400).json({
         success: false,
